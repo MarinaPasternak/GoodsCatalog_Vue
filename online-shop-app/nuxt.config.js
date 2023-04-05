@@ -21,9 +21,18 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    /*
-    ** Run ESLint on save
-    */
+    loaders: {
+      scss: {
+        implementation: require('sass'),
+        sassOptions: {
+          includePaths: ['node_modules']
+        }
+      }
+    }
+  },
+  css: [
+    '@/assets/styles/main.scss'
+  ],
     extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
@@ -35,5 +44,3 @@ module.exports = {
       }
     }
   }
-}
-
