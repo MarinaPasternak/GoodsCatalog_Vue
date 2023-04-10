@@ -30,6 +30,9 @@ module.exports = {
       }
     }
   },
+  vuex: {
+    store: true,
+  },
   css: [
     '@/assets/styles/main.scss'
   ],
