@@ -1,6 +1,19 @@
-@import "./_variables.scss";
+@import "./variables";
 
 * {
     color: $font-color;
     font-family: $font-family;
+}
+
+.title {
+    margin: 3rem 0;
+}
+
+.primary-button {
+    width: 80%;
+    padding: 0.8rem;
+    border: 1px solid $font-color;
+    border-radius: 20px;
+    font-weight: 700;
+    background-color: $white-color;
 }

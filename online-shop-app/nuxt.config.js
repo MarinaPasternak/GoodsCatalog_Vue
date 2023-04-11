@@ -38,6 +38,11 @@ module.exports = {
     'bootstrap/dist/css/bootstrap.css',
     'bootstrap-vue/dist/bootstrap-vue.css'
   ],
+  styleResources: {
+    scss: [
+      '@/assets/styles/_variables',
+    ]
+  },
   modules: [
     'bootstrap-vue/nuxt'
   ],
