@@ -2,27 +2,29 @@
   <div>
     <h1 class="title">Products</h1>
     <template v-if="products">
-      <b-pagination
-        class="custom-pagination"
-        :total-rows="totalRows"
-        :per-page="perPage"
-        v-model="currentPage"
-        @input="fetchAllProducts"
-      ></b-pagination>
       <div class="catalog-container">
-        <catalog-card
-          v-for="product in filteredProducts"
-          :product="product"
-          :key="product.id"
-        ></catalog-card>
+        <b-pagination
+          class="custom-pagination"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          v-model="currentPage"
+          @input="fetchAllProducts"
+        ></b-pagination>
+        <div class="goods-list-container">
+          <catalog-card
+            v-for="product in filteredProducts"
+            :product="product"
+            :key="product.id"
+          ></catalog-card>
+        </div>
+        <b-pagination
+          class="custom-pagination"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          v-model="currentPage"
+          @input="fetchAllProducts"
+        ></b-pagination>
       </div>
-      <b-pagination
-        class="custom-pagination"
-        :total-rows="totalRows"
-        :per-page="perPage"
-        v-model="currentPage"
-        @input="fetchAllProducts"
-      ></b-pagination>
     </template>
   </div>
 </template>
@@ -69,12 +71,20 @@ export default {
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
+
 .catalog-container {
+  padding: 2rem;
+  border-radius: 10px;
+  background-color: $white-color;
+}
+
+.goods-list-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   align-content: center;
 }
+
 .custom-pagination {
   margin-left: 1rem;
 }

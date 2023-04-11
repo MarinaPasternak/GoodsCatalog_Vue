@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <h1>Card</h1>
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {};
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped></style>
