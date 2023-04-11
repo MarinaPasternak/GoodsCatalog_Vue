@@ -10,7 +10,7 @@ export const mutations = {
 
 export const actions = {
   async fetchAllProducts({ commit }) {
-    const response = await fetch('https://dummyjson.com/products')
+    const response = await fetch('https://dummyjson.com/products?limit=0')
     const products = await response.json()
     commit('SET_PRODUCTS', products)
   }

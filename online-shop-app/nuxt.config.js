@@ -34,8 +34,16 @@ module.exports = {
     store: true,
   },
   css: [
-    '@/assets/styles/main.scss'
+    '@/assets/styles/main.scss',
+    'bootstrap/dist/css/bootstrap.css',
+    'bootstrap-vue/dist/bootstrap-vue.css'
   ],
+  modules: [
+    'bootstrap-vue/nuxt'
+  ],
+   bootstrapVue: {
+    icons: true
+  },
     extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
