@@ -2,6 +2,7 @@
   <div>
     <h1 class="title">Products</h1>
     <template v-if="products">
+      <filters :options="filterOptions" @selected="onFilterSelected"></filters>
       <div class="catalog-container">
         <b-pagination
           class="custom-pagination"
@@ -32,13 +33,16 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import CatalogCard from "./components/CatalogCard.vue";
+import Filters from "./components/Filters.vue";
 
 export default {
   components: {
     CatalogCard,
+    Filters,
   },
   data() {
     return {
+      filterOptions: {},
       currentPage: 1,
       perPage: 6,
       totalRows: 0,
