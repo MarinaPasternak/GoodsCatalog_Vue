@@ -3,7 +3,20 @@
     <div class="shop-card">
       <img :src="product.images[0]" :alt="product.title" />
       <div class="cost-container">
-        <p>${{ product.price }}</p>
+        <template v-if="product.discountPercentage > 0">
+          <p class="old-price">${{ product.price }}</p>
+          <p class="new-price">
+            ${{
+              (
+                product.price -
+                (product.discountPercentage * product.price) / 100
+              ).toFixed(2)
+            }}
+          </p>
+        </template>
+        <template v-else>
+          <p>${{ product.price }}</p>
+        </template>
       </div>
       <h3>{{ product.title }}</h3>
       <div class="rating-container">
@@ -79,9 +92,21 @@ export default {
   }
 
   img {
-    max-width: 300px;
-    max-height: 200px;
+    max-width: 250px;
+    max-height: 150px;
     margin-bottom: 1rem;
+  }
+
+  .cost-container {
+    .old-price {
+      font-size: 0.8rem;
+      text-decoration: line-through;
+    }
+
+    .new-price {
+      color: $red-color;
+      font-weight: 600;
+    }
   }
 
   .description-container {
