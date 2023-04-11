@@ -17,3 +17,8 @@
     font-weight: 700;
     background-color: $white-color;
 }
+
+.primary-button:hover {
+    color: $white-color;
+    background-color: $font-color;
+}
