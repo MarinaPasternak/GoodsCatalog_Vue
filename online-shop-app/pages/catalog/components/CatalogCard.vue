@@ -50,7 +50,7 @@ export default {
       return Math.floor(this.product.rating);
     },
     hasHalfRatingStar() {
-      return this.product.rating % 1 !== 0;
+      return this.product.rating % 1 >= 0.5;
     },
   },
   methods: {

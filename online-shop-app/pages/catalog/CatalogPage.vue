@@ -1,17 +1,33 @@
 <template>
   <div>
     <h1 class="title">Products</h1>
-    <div class="catalog-container">
-      <catalog-card
-        v-for="product in products"
-        :product="product"
-        :key="product.id"
-      ></catalog-card>
-    </div>
+    <template v-if="products">
+      <b-pagination
+        class="custom-pagination"
+        :total-rows="totalRows"
+        :per-page="perPage"
+        v-model="currentPage"
+        @input="fetchAllProducts"
+      ></b-pagination>
+      <div class="catalog-container">
+        <catalog-card
+          v-for="product in filteredProducts"
+          :product="product"
+          :key="product.id"
+        ></catalog-card>
+      </div>
+      <b-pagination
+        class="custom-pagination"
+        :total-rows="totalRows"
+        :per-page="perPage"
+        v-model="currentPage"
+        @input="fetchAllProducts"
+      ></b-pagination>
+    </template>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { mapState, mapActions } from "vuex";
 import CatalogCard from "./components/CatalogCard.vue";
 
@@ -19,13 +35,31 @@ export default {
   components: {
     CatalogCard,
   },
+  data() {
+    return {
+      currentPage: 1,
+      perPage: 6,
+      totalRows: 0,
+    };
+  },
   computed: {
     ...mapState({
       products: (state) => state.products.products,
     }),
+    filteredProducts() {
+      this.getAllProductsCount();
+
+      const startIndex = (this.currentPage - 1) * this.perPage;
+      const endIndex = startIndex + this.perPage;
+
+      return this.products.slice(startIndex, endIndex);
+    },
   },
   methods: {
     ...mapActions(["fetchAllProducts"]),
+    getAllProductsCount() {
+      this.totalRows = this.products.length;
+    },
   },
   mounted() {
     this.fetchAllProducts();
@@ -40,5 +74,22 @@ export default {
   flex-wrap: wrap;
   justify-content: space-around;
   align-content: center;
+}
+.custom-pagination {
+  margin-left: 1rem;
+}
+
+.custom-pagination:last-child {
+  margin-top: 1rem;
+}
+
+::v-deep .custom-pagination .page-link {
+  background: $white-color;
+  color: $font-color;
+  border: $secondary-color 1px solid;
+}
+::v-deep .custom-pagination .active button {
+  background: $font-color;
+  color: $white-color;
 }
 </style>
