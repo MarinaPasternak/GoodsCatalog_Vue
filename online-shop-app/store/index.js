@@ -1,12 +1,31 @@
 import Vuex from 'vuex'
-import { state, mutations, actions, getters } from './modules/products'
+import { 
+  state as productState, 
+  mutations as productMutations,
+  actions as productActions,
+  getters as productGetters 
+} from './modules/products';
+import { 
+  state as categoryState,
+  mutations as categoryMutations,
+  actions as categoryActions,
+} from './modules/categories';
 
 const createStore = () => {
   return new Vuex.Store({
-    state,
-    mutations,
-    actions,
-    getters
+    modules: {
+      products: {
+        state: productState,
+        mutations: productMutations,
+        actions: productActions,
+        getters: productGetters
+      },
+      categories: {
+        state: categoryState,
+        mutations: categoryMutations,
+        actions: categoryActions,
+      }
+    }
   })
 }
 

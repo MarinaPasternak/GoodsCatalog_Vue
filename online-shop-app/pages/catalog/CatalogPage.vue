@@ -2,30 +2,32 @@
   <div>
     <h1 class="title">Products</h1>
     <template v-if="products">
-      <filters :options="filterOptions" @selected="onFilterSelected"></filters>
-      <div class="catalog-container">
-        <b-pagination
-          class="custom-pagination"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          v-model="currentPage"
-          @input="fetchAllProducts"
-        ></b-pagination>
-        <div class="goods-list-container">
-          <catalog-card
-            v-for="product in filteredProducts"
-            :product="product"
-            :key="product.id"
-          ></catalog-card>
+      <section class="products-block">
+        <filters></filters>
+        <div class="catalog-container">
+          <b-pagination
+            class="custom-pagination"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            v-model="currentPage"
+            @input="fetchAllProducts"
+          ></b-pagination>
+          <div class="goods-list-container">
+            <catalog-card
+              v-for="product in filteredProducts"
+              :product="product"
+              :key="product.id"
+            ></catalog-card>
+          </div>
+          <b-pagination
+            class="custom-pagination"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            v-model="currentPage"
+            @input="fetchAllProducts"
+          ></b-pagination>
         </div>
-        <b-pagination
-          class="custom-pagination"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          v-model="currentPage"
-          @input="fetchAllProducts"
-        ></b-pagination>
-      </div>
+      </section>
     </template>
   </div>
 </template>
@@ -42,7 +44,6 @@ export default {
   },
   data() {
     return {
-      filterOptions: {},
       currentPage: 1,
       perPage: 6,
       totalRows: 0,
@@ -50,7 +51,7 @@ export default {
   },
   computed: {
     ...mapState({
-      products: (state) => state.products.products,
+      products: (state) => state.products.products.products,
     }),
     filteredProducts() {
       this.getAllProductsCount();
@@ -67,7 +68,7 @@ export default {
       this.totalRows = this.products.length;
     },
   },
-  mounted() {
+  created() {
     this.fetchAllProducts();
   },
 };
@@ -75,6 +76,10 @@ export default {
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
+
+.products-block {
+  display: flex;
+}
 
 .catalog-container {
   padding: 2rem;
