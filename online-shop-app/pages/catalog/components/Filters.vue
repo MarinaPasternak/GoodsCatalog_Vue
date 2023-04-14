@@ -103,7 +103,8 @@ export default {
     if (this.pricePrametrs) {
       if (this.pricePrametrs.max > 0) {
         this.minPrice = this.pricePrametrs.min;
-      } else if (this.pricePrametrs.min > 0) {
+      }
+      if (this.pricePrametrs.min > 0) {
         this.maxPrice = this.pricePrametrs.max;
       }
     }
