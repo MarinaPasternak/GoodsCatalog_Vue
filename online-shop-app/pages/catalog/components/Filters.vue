@@ -41,7 +41,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
-  props: ["priceRange"],
+  props: ["priceRange", "categoriesParametrs", "pricePrametrs"],
   data() {
     return {
       selectedCategories: [],
@@ -60,15 +60,53 @@ export default {
   methods: {
     ...mapActions(["fetchAllCategories"]),
     applyFilters() {
+      if (
+        this.minPrice > 0 ||
+        this.maxPrice > 0 ||
+        this.selectedCategories.length > 0
+      ) {
+      }
+      this.pushFiltersParamToRout();
       this.$emit("apply-filters", {
         categories: this.selectedCategories,
-        minPrice: this.minPrice,
-        maxPrice: this.maxPrice,
+        minPrice: this.minPrice || this.priceRange.min,
+        maxPrice: this.maxPrice || this.priceRange.max,
       });
+    },
+    pushFiltersParamToRout() {
+      let query = {};
+
+      if (this.selectedCategories.length > 0) {
+        query.categories = this.selectedCategories.join(",");
+      }
+
+      if (this.minPrice || this.maxPrice) {
+        query.minPrice = this.minPrice || this.priceRange.min;
+        query.maxPrice = this.maxPrice || this.priceRange.max;
+      }
+
+      if (query) {
+        this.$router.push({ path: "/catalog/CatalogPage", query });
+      }
     },
   },
   created() {
     this.fetchAllCategories();
+
+    if (this.categoriesParametrs) {
+      const updatedCategoriesParametrs = this.categoriesParametrs.map(
+        (category) => category.replace("-", " ")
+      );
+      this.selectedCategories = updatedCategoriesParametrs;
+    }
+
+    if (this.pricePrametrs) {
+      if (this.pricePrametrs.max > 0) {
+        this.minPrice = this.pricePrametrs.min;
+      } else if (this.pricePrametrs.min > 0) {
+        this.maxPrice = this.pricePrametrs.max;
+      }
+    }
   },
 };
 </script>

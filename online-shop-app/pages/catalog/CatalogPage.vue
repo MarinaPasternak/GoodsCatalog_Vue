@@ -6,6 +6,8 @@
         <filters
           @apply-filters="applyFilters"
           :priceRange="minMaxPrices"
+          :categoriesParametrs="selectedCategories"
+          :pricePrametrs="priceFilter"
         ></filters>
         <div class="catalog-container">
           <div class="catalog-header">
@@ -56,7 +58,7 @@ export default {
       perPage: 6,
       totalRows: 0,
       selectedCategories: [],
-      priceFilter: null,
+      priceFilter: {},
     };
   },
   computed: {
@@ -75,7 +77,10 @@ export default {
         this.getAllProductsCount(filteredProducts);
       }
 
-      if (this.priceFilter) {
+      if (
+        this.priceFilter &&
+        (this.priceFilter.min > 0 || this.priceFilter.max > 0)
+      ) {
         filteredProducts = filteredProducts.filter((product) => {
           const priceWithDiscount =
             product.price - (product.discountPercentage * product.price) / 100;
@@ -134,12 +139,34 @@ export default {
       };
       this.currentPage = 1;
     },
+    getFilterParamsFromRoute() {
+      const { categories, minPrice, maxPrice } = this.$route.query;
+
+      if (categories) {
+        this.selectedCategories = categories.split(",");
+
+        this.selectedCategories = this.selectedCategories.map((category) => {
+          return category.replace(" ", "-");
+        });
+      }
+
+      console.log(this.$route.query);
+
+      if (minPrice) {
+        this.priceFilter.min = Number(minPrice);
+      }
+
+      if (maxPrice) {
+        this.priceFilter.max = Number(maxPrice);
+      }
+    },
     clearAllFilters() {
       this.selectedCategories = [];
       this.priceFilter = null;
     },
   },
   created() {
+    this.getFilterParamsFromRoute();
     this.fetchAllProducts();
   },
 };
@@ -148,8 +175,12 @@ export default {
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 
+h1 {
+  text-align: center;
+}
 .products-block {
   display: flex;
+  margin: 2rem;
 }
 
 .catalog-container {

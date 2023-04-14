@@ -78,6 +78,7 @@ export default {
   padding-bottom: 70px;
   border-radius: 10px;
   background-color: $white-color;
+  text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);

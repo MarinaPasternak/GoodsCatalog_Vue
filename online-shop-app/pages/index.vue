@@ -1,9 +1,7 @@
 <template>
-  <section class="container">
-    <div>
-      <catalog-page></catalog-page>
-    </div>
-  </section>
+  <div>
+    <catalog-page></catalog-page>
+  </div>
 </template>
 
 <script>
@@ -15,12 +13,4 @@ export default {
 };
 </script>
 
-<style>
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-</style>
+<style></style>
