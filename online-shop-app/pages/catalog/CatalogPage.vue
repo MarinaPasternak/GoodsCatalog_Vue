@@ -3,15 +3,23 @@
     <h1 class="title">Products</h1>
     <template v-if="products">
       <div class="products-block">
-        <filters @apply-filters="applyFilters"></filters>
+        <filters
+          @apply-filters="applyFilters"
+          :priceRange="minMaxPrices"
+        ></filters>
         <div class="catalog-container">
-          <b-pagination
-            class="custom-pagination"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            v-model="currentPage"
-            @input="fetchAllProducts"
-          ></b-pagination>
+          <div class="catalog-header">
+            <b-pagination
+              class="custom-pagination"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              v-model="currentPage"
+              @input="fetchAllProducts"
+            ></b-pagination>
+            <button class="primary-button" @click="clearAllFilters">
+              View All Products
+            </button>
+          </div>
           <div class="goods-list-container">
             <catalog-card
               v-for="product in filteredProducts"
@@ -47,7 +55,8 @@ export default {
       currentPage: 1,
       perPage: 6,
       totalRows: 0,
-      selectedCategories: null,
+      selectedCategories: [],
+      priceFilter: null,
     };
   },
   computed: {
@@ -58,9 +67,23 @@ export default {
       let filteredProducts = this.products;
       this.getAllProductsCount(filteredProducts);
 
-      if (this.selectedCategories) {
+      if (this.selectedCategories.length > 0) {
         filteredProducts = filteredProducts.filter((product) => {
           return this.selectedCategories.includes(product.category);
+        });
+
+        this.getAllProductsCount(filteredProducts);
+      }
+
+      if (this.priceFilter) {
+        filteredProducts = filteredProducts.filter((product) => {
+          const priceWithDiscount =
+            product.price - (product.discountPercentage * product.price) / 100;
+
+          return (
+            priceWithDiscount >= this.priceFilter.min &&
+            priceWithDiscount <= this.priceFilter.max
+          );
         });
 
         this.getAllProductsCount(filteredProducts);
@@ -70,6 +93,28 @@ export default {
       const endIndex = startIndex + this.perPage;
 
       return filteredProducts.slice(startIndex, endIndex);
+    },
+    minMaxPrices() {
+      let minPrice =
+        this.products[0].price -
+        (this.products[0].discountPercentage * this.products[0].price) / 100;
+      let maxPrice =
+        this.products[0].price -
+        (this.products[0].discountPercentage * this.products[0].price) / 100;
+
+      this.products.forEach((product) => {
+        const priceWithDiscount =
+          product.price - (product.discountPercentage * product.price) / 100;
+
+        if (priceWithDiscount < minPrice) {
+          minPrice = product.price;
+        }
+        if (priceWithDiscount > maxPrice) {
+          maxPrice = product.price;
+        }
+      });
+
+      return { min: minPrice, max: maxPrice };
     },
   },
   methods: {
@@ -83,7 +128,15 @@ export default {
       );
 
       this.selectedCategories = updatedCategories;
+      this.priceFilter = {
+        min: Number(categories.minPrice),
+        max: Number(categories.maxPrice),
+      };
       this.currentPage = 1;
+    },
+    clearAllFilters() {
+      this.selectedCategories = [];
+      this.priceFilter = null;
     },
   },
   created() {
@@ -104,6 +157,17 @@ export default {
   padding: 2rem;
   border-radius: 10px;
   background-color: $white-color;
+
+  .catalog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .primary-button {
+      padding: 0.3rem;
+      width: fit-content;
+    }
+  }
 }
 
 .goods-list-container {
