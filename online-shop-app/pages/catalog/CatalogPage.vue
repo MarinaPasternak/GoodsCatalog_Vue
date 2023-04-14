@@ -2,8 +2,8 @@
   <div>
     <h1 class="title">Products</h1>
     <template v-if="products">
-      <section class="products-block">
-        <filters></filters>
+      <div class="products-block">
+        <filters @apply-filters="applyFilters"></filters>
         <div class="catalog-container">
           <b-pagination
             class="custom-pagination"
@@ -27,7 +27,7 @@
             @input="fetchAllProducts"
           ></b-pagination>
         </div>
-      </section>
+      </div>
     </template>
   </div>
 </template>
@@ -47,6 +47,7 @@ export default {
       currentPage: 1,
       perPage: 6,
       totalRows: 0,
+      selectedCategories: null,
     };
   },
   computed: {
@@ -54,18 +55,35 @@ export default {
       products: (state) => state.products.products.products,
     }),
     filteredProducts() {
-      this.getAllProductsCount();
+      let filteredProducts = this.products;
+      this.getAllProductsCount(filteredProducts);
+
+      if (this.selectedCategories) {
+        filteredProducts = filteredProducts.filter((product) => {
+          return this.selectedCategories.includes(product.category);
+        });
+
+        this.getAllProductsCount(filteredProducts);
+      }
 
       const startIndex = (this.currentPage - 1) * this.perPage;
       const endIndex = startIndex + this.perPage;
 
-      return this.products.slice(startIndex, endIndex);
+      return filteredProducts.slice(startIndex, endIndex);
     },
   },
   methods: {
     ...mapActions(["fetchAllProducts"]),
-    getAllProductsCount() {
-      this.totalRows = this.products.length;
+    getAllProductsCount(products) {
+      this.totalRows = products.length;
+    },
+    applyFilters(categories) {
+      const updatedCategories = categories.categories.map((category) =>
+        category.replace(" ", "-")
+      );
+
+      this.selectedCategories = updatedCategories;
+      this.currentPage = 1;
     },
   },
   created() {
@@ -82,6 +100,7 @@ export default {
 }
 
 .catalog-container {
+  width: 80%;
   padding: 2rem;
   border-radius: 10px;
   background-color: $white-color;

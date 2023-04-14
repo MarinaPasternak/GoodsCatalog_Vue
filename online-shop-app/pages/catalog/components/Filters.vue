@@ -4,15 +4,18 @@
       <h4>Filters</h4>
       <h5>By Category</h5>
       <b-form-checkbox
-        v-for="option in categories"
+        v-for="option in updatedCategories"
         :key="option"
         :id="option"
         :value="option"
+        v-model="selectedCategories"
       >
         {{ option }}
       </b-form-checkbox>
+      <button class="primary-button" @click="applyFilters">
+        Apply Filters
+      </button>
     </div>
-    <button class="primary-button">Apply Filters</button>
   </div>
 </template>
 
@@ -21,16 +24,24 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-      selectedValues: {},
+      selectedCategories: [],
     };
   },
   computed: {
     ...mapState({
       categories: (state) => state.categories.categories,
     }),
+    updatedCategories() {
+      return this.categories.map((category) => category.replace("-", " "));
+    },
   },
   methods: {
     ...mapActions(["fetchAllCategories"]),
+    applyFilters() {
+      this.$emit("apply-filters", {
+        categories: this.selectedCategories,
+      });
+    },
   },
   created() {
     this.fetchAllCategories();
@@ -43,7 +54,7 @@ export default {
 
 .filters {
   margin-right: 2rem;
-  width: 40%;
+  width: 20%;
   padding: 1.2rem;
   border-radius: 10px;
   background-color: $white-color;
