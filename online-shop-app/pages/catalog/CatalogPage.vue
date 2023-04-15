@@ -10,7 +10,26 @@
           :pricePrametrs="priceFilter"
         ></filters>
         <div class="catalog-container">
-          <div class="catalog-header">
+          <template v-if="filteredProducts.length > 0">
+            <div class="catalog-header">
+              <b-pagination
+                class="custom-pagination"
+                :total-rows="totalRows"
+                :per-page="perPage"
+                v-model="currentPage"
+                @input="fetchAllProducts"
+              ></b-pagination>
+              <button class="primary-button" @click="clearAllFilters">
+                View All Products
+              </button>
+            </div>
+            <div class="goods-list-container">
+              <catalog-card
+                v-for="product in filteredProducts"
+                :product="product"
+                :key="product.id"
+              ></catalog-card>
+            </div>
             <b-pagination
               class="custom-pagination"
               :total-rows="totalRows"
@@ -18,24 +37,10 @@
               v-model="currentPage"
               @input="fetchAllProducts"
             ></b-pagination>
-            <button class="primary-button" @click="clearAllFilters">
-              View All Products
-            </button>
-          </div>
-          <div class="goods-list-container">
-            <catalog-card
-              v-for="product in filteredProducts"
-              :product="product"
-              :key="product.id"
-            ></catalog-card>
-          </div>
-          <b-pagination
-            class="custom-pagination"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            v-model="currentPage"
-            @input="fetchAllProducts"
-          ></b-pagination>
+          </template>
+          <template v-else>
+            <nothing-found></nothing-found>
+          </template>
         </div>
       </div>
     </template>
@@ -46,11 +51,13 @@
 import { mapState, mapActions } from "vuex";
 import CatalogCard from "./components/CatalogCard.vue";
 import Filters from "./components/Filters.vue";
+import NothingFound from "../../components/NothingFound.vue";
 
 export default {
   components: {
     CatalogCard,
     Filters,
+    NothingFound,
   },
   data() {
     return {
@@ -149,8 +156,6 @@ export default {
           return category.replace(" ", "-");
         });
       }
-
-      console.log(this.$route.query);
 
       if (minPrice) {
         this.priceFilter.min = Number(minPrice);

@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div>
+    <h3>Nothing has been found</h3>
+  </div>
 </template>
 
 <script>

@@ -3,7 +3,6 @@ import {
   state as productState, 
   mutations as productMutations,
   actions as productActions,
-  getters as productGetters 
 } from './modules/products';
 import { 
   state as categoryState,
@@ -18,7 +17,6 @@ const createStore = () => {
         state: productState,
         mutations: productMutations,
         actions: productActions,
-        getters: productGetters
       },
       categories: {
         state: categoryState,
