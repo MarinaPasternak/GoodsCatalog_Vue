@@ -9,7 +9,6 @@
           class="primary-button"
         >
           Clear
-          <b-icon icon="x-lg"></b-icon>
         </button>
       </div>
       <h5>By Category</h5>
@@ -140,7 +139,7 @@ export default {
 .filters {
   margin-right: 2rem;
   width: 20%;
-  padding: 1.2rem;
+  padding: 0 1.2rem;
   border-radius: 10px;
   background-color: $white-color;
 
@@ -148,16 +147,25 @@ export default {
     margin-bottom: 15px;
   }
 
+  h5 {
+    margin-top: 15px;
+  }
+
   .primary-button {
     margin-top: 2rem;
     padding: 0.3rem;
+    width: 100%;
   }
 
   .filters-header {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
+
+    h4 {
+      margin: 0;
+    }
 
     .primary-button {
       padding: 0.3rem;
@@ -193,10 +201,6 @@ export default {
 .price-filter {
   text-align: left;
 
-  h5 {
-    margin-top: 15px;
-  }
-
   .input-container {
     display: flex;
     gap: 10px;
@@ -209,13 +213,5 @@ export default {
 
 ::v-deep .custom-control input {
   margin-right: 5px;
-}
-
-::v-deep .primary-button:disabled .bi-x-lg path {
-  color: $secondary-color;
-}
-
-::v-deep .primary-button .bi-x-lg path {
-  color: $red-color;
 }
 </style>

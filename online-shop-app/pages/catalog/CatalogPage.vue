@@ -3,12 +3,22 @@
     <template v-if="products">
       <div class="products-block">
         <filters
+          class="aside-filters"
           @apply-filters="applyFilters"
           @clear-filters="clearFilters"
           :priceRange="minMaxPrices"
           :categoriesParametrs="selectedCategories"
           :pricePrametrs="priceFilter"
         ></filters>
+        <b-sidebar id="filterSideBar" shadow>
+          <filters
+            @apply-filters="applyFilters"
+            @clear-filters="clearFilters"
+            :priceRange="minMaxPrices"
+            :categoriesParametrs="selectedCategories"
+            :pricePrametrs="priceFilter"
+          ></filters>
+        </b-sidebar>
         <div class="catalog-container">
           <template v-if="filteredProducts.length > 0">
             <div class="catalog-header">
@@ -19,6 +29,11 @@
                 v-model="currentPage"
                 @input="fetchAllProducts"
               ></b-pagination>
+              <b-button
+                v-b-toggle.filterSideBar
+                class="show-filter-button primary-button"
+                >Add Filters</b-button
+              >
             </div>
             <div class="goods-list-container">
               <catalog-card
@@ -200,6 +215,7 @@ h1 {
     .primary-button {
       padding: 0.3rem;
       width: fit-content;
+      color: $font-color;
     }
   }
 }
@@ -219,6 +235,20 @@ h1 {
   margin-top: 1rem;
 }
 
+#filterSideBar {
+  .filters {
+    width: 100%;
+  }
+  .primary-button {
+    width: 100%;
+  }
+}
+
+::v-deep #filterSideBar .close {
+  border: none;
+  background-color: transparent;
+}
+
 ::v-deep .custom-pagination .page-link {
   background: $white-color;
   color: $font-color;
@@ -227,5 +257,52 @@ h1 {
 ::v-deep .custom-pagination .active button {
   background: $font-color;
   color: $white-color;
+}
+
+::v-deep .b-sidebar-header {
+  padding-bottom: 0;
+  background-color: $white-color;
+}
+
+::v-deep .b-sidebar-body {
+  background-color: $white-color;
+}
+
+@media (min-width: 992px) {
+  .show-filter-button {
+    display: none;
+  }
+
+  .aside-filters {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .show-filter-button {
+    display: block;
+  }
+
+  .aside-filters {
+    display: none;
+  }
+
+  .catalog-container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .show-filter-button {
+    display: block;
+  }
+
+  .aside-filters {
+    display: none;
+  }
+
+  .catalog-container {
+    width: 100%;
+  }
 }
 </style>
