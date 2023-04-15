@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h1 class="title">Products</h1>
     <template v-if="products">
       <div class="products-block">
         <filters
           @apply-filters="applyFilters"
+          @clear-filters="clearFilters"
           :priceRange="minMaxPrices"
           :categoriesParametrs="selectedCategories"
           :pricePrametrs="priceFilter"
@@ -19,9 +19,6 @@
                 v-model="currentPage"
                 @input="fetchAllProducts"
               ></b-pagination>
-              <button class="primary-button" @click="clearAllFilters">
-                View All Products
-              </button>
             </div>
             <div class="goods-list-container">
               <catalog-card
@@ -165,7 +162,8 @@ export default {
         this.priceFilter.max = Number(maxPrice);
       }
     },
-    clearAllFilters() {
+    clearFilters() {
+      this.currentPage = 1;
       this.selectedCategories = [];
       this.priceFilter = null;
     },

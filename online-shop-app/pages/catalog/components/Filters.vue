@@ -1,7 +1,17 @@
 <template>
   <div class="filters">
     <div class="categories-filter">
-      <h4>Filters</h4>
+      <div class="filters-header">
+        <h4 class="title">Filters</h4>
+        <button
+          @click="clearFilters"
+          :disabled="isFiltersApplied"
+          class="primary-button"
+        >
+          Clear
+          <b-icon icon="x-lg"></b-icon>
+        </button>
+      </div>
       <h5>By Category</h5>
       <b-form-checkbox
         v-for="option in updatedCategories"
@@ -47,6 +57,7 @@ export default {
       selectedCategories: [],
       minPrice: null,
       maxPrice: null,
+      isFiltersApplied: true,
     };
   },
   computed: {
@@ -67,6 +78,7 @@ export default {
       ) {
       }
       this.pushFiltersParamToRout();
+      this.isFiltersApplied = false;
       this.$emit("apply-filters", {
         categories: this.selectedCategories,
         minPrice: this.minPrice || this.priceRange.min,
@@ -89,11 +101,19 @@ export default {
         this.$router.push({ path: "/catalog/CatalogPage", query });
       }
     },
+    clearFilters() {
+      this.$router.push({ path: "/catalog/CatalogPage" });
+      this.isFiltersApplied = true;
+      this.selectedCategories = [];
+      this.priceFilter = null;
+      this.$emit("clear-filters");
+    },
   },
   created() {
     this.fetchAllCategories();
 
-    if (this.categoriesParametrs) {
+    if (this.categoriesParametrs.length > 0) {
+      this.isFiltersApplied = false;
       const updatedCategoriesParametrs = this.categoriesParametrs.map(
         (category) => category.replace("-", " ")
       );
@@ -102,9 +122,11 @@ export default {
 
     if (this.pricePrametrs) {
       if (this.pricePrametrs.max > 0) {
+        this.isFiltersApplied = false;
         this.minPrice = this.pricePrametrs.min;
       }
       if (this.pricePrametrs.min > 0) {
+        this.isFiltersApplied = false;
         this.maxPrice = this.pricePrametrs.max;
       }
     }
@@ -129,6 +151,36 @@ export default {
   .primary-button {
     margin-top: 2rem;
     padding: 0.3rem;
+  }
+
+  .filters-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+    .primary-button {
+      padding: 0.3rem;
+      width: fit-content;
+      height: fit-content;
+      font-size: 0.8rem;
+      color: $red-color;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button:disabled {
+      color: $secondary-color;
+      background-color: $white-color;
+    }
+
+    .primary-button:hover {
+      background-color: $white-color;
+    }
+
+    .primary-button:not(:disabled):hover {
+      font-size: 1.1rem;
+    }
   }
 }
 
@@ -157,5 +209,13 @@ export default {
 
 ::v-deep .custom-control input {
   margin-right: 5px;
+}
+
+::v-deep .primary-button:disabled .bi-x-lg path {
+  color: $secondary-color;
+}
+
+::v-deep .primary-button .bi-x-lg path {
+  color: $red-color;
 }
 </style>
