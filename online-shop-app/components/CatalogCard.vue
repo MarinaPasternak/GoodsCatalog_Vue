@@ -32,7 +32,9 @@
       <div class="description-container">
         {{ product.description }}
       </div>
-      <button class="primary-button">Details</button>
+      <nuxt-link :to="`/catalog/${product.id}`">
+        <button class="primary-button">Details</button>
+      </nuxt-link>
     </div>
   </div>
 </template>

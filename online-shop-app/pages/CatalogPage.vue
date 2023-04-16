@@ -61,9 +61,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import CatalogCard from "./components/CatalogCard.vue";
-import Filters from "./components/Filters.vue";
-import NothingFound from "../../components/NothingFound.vue";
+import CatalogCard from "../components/CatalogCard.vue";
+import Filters from "../components/Filters.vue";
+import NothingFound from "../components/NothingFound.vue";
 
 export default {
   components: {
