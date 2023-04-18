@@ -34,6 +34,10 @@
             <p>${{ product.price }}</p>
           </template>
         </div>
+        <div class="badge-container">
+          <b-badge pill class="badge">{{ product.brand }}</b-badge>
+          <b-badge pill class="badge">{{ product.category }}</b-badge>
+        </div>
         <div class="description-container">
           {{ product.description }}
         </div>
@@ -107,6 +111,7 @@ export default {
     margin-top: 15px;
 
     .primary-button {
+      width: 100%;
       position: relative;
       margin-top: 3rem;
       margin-bottom: 1rem;
@@ -138,6 +143,17 @@ export default {
   p {
     margin: 0;
     margin-left: 5px;
+  }
+}
+
+.badge-container {
+  display: flex;
+  margin-top: 1.3rem;
+  align-items: center;
+
+  .badge {
+    margin-right: 1rem;
+    background-color: $font-color;
   }
 }
 </style>
