@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import CatalogPage from "./CatalogPage.vue";
+import CatalogPage from "./ product.vue";
 export default {
   components: {
     CatalogPage,
