@@ -264,6 +264,7 @@ h1 {
     .sort-categories {
       padding: 0.3rem;
       margin-left: 0.6rem;
+      border-radius: 10px;
     }
   }
 }
