@@ -97,11 +97,11 @@ export default {
       }
 
       if (query) {
-        this.$router.push({ path: "/catalog/CatalogPage", query });
+        this.$router.push({ path: "/", query });
       }
     },
     clearFilters() {
-      this.$router.push({ path: "/catalog/CatalogPage" });
+      this.$router.push({ path: "/" });
       this.isFiltersApplied = true;
       this.selectedCategories = [];
       this.priceFilter = null;

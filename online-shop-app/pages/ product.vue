@@ -29,6 +29,20 @@
                 v-model="currentPage"
                 @input="fetchAllProducts"
               ></b-pagination>
+              <div>
+                <label>From:</label>
+                <b-form-select class="sort-categories" v-model="sortParametr">
+                  <b-form-select-option selected value="popular"
+                    >The most popular</b-form-select-option
+                  >
+                  <b-form-select-option value="expensive"
+                    >The most expensive</b-form-select-option
+                  >
+                  <b-form-select-option value="cheapest"
+                    >The cheapest</b-form-select-option
+                  >
+                </b-form-select>
+              </div>
               <b-button
                 v-b-toggle.filterSideBar
                 class="show-filter-button primary-button"
@@ -78,6 +92,7 @@ export default {
       totalRows: 0,
       selectedCategories: [],
       priceFilter: {},
+      sortParametr: "popular",
     };
   },
   computed: {
@@ -112,6 +127,8 @@ export default {
 
         this.getAllProductsCount(filteredProducts);
       }
+
+      filteredProducts = this.sortProducts(filteredProducts);
 
       const startIndex = (this.currentPage - 1) * this.perPage;
       const endIndex = startIndex + this.perPage;
@@ -157,6 +174,27 @@ export default {
         max: Number(categories.maxPrice),
       };
       this.currentPage = 1;
+    },
+    sortProducts(products) {
+      if (this.sortParametr === "popular") {
+        return products.sort((a, b) => b.rating - a.rating);
+      } else if (this.sortParametr === "expensive") {
+        return products.sort((a, b) => {
+          const discountedPriceA =
+            a.price - (a.discountPercentage * a.price) / 100;
+          const discountedPriceB =
+            b.price - (b.discountPercentage * b.price) / 100;
+          return discountedPriceB - discountedPriceA;
+        });
+      } else {
+        return products.sort((a, b) => {
+          const discountedPriceA =
+            a.price - (a.discountPercentage * a.price) / 100;
+          const discountedPriceB =
+            b.price - (b.discountPercentage * b.price) / 100;
+          return discountedPriceA - discountedPriceB;
+        });
+      }
     },
     getFilterParamsFromRoute() {
       const { categories, minPrice, maxPrice } = this.$route.query;
@@ -211,11 +249,21 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 1.3rem;
 
     .primary-button {
       padding: 0.3rem;
       width: fit-content;
       color: $font-color;
+    }
+
+    .primary-button:hover {
+      color: $white-color;
+    }
+
+    .sort-categories {
+      padding: 0.3rem;
+      margin-left: 0.6rem;
     }
   }
 }
@@ -229,6 +277,7 @@ h1 {
 
 .custom-pagination {
   margin-left: 1rem;
+  margin-bottom: 0;
 }
 
 .custom-pagination:last-child {
