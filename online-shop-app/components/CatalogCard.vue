@@ -70,7 +70,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/main.scss";
+
 .shop-card {
   width: 400px;
   height: 450px;
